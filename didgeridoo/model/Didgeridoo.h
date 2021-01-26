@@ -24,17 +24,17 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <main.h>
+#ifndef DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
+#define DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
 
-int main() {
-  auto generator = new Generator();
+#include <cstdint>
+#include <cstdlib>
+#include <model/Generator.h>
 
-  Didgeridoo::generate(generator, 100, 1);
-  generator->ConcatTones("didgeridoo.wav");
-  helper::System::RunShellCommand("play didgeridoo.wav");
+class Didgeridoo {
+ public:
+  static void generate(Generator *generator, uint8_t length,
+                       uint8_t multiplier /*multiply tone and speed, max: 6*/);
+};
 
-  helper::System::RunShellCommand("rm *.wav");
-
-  delete generator;
-}
-
+#endif //DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_

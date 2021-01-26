@@ -41,6 +41,8 @@ class Generator {
   Generator* GenerateTone(
       uint8_t tone, double seconds   = 0.5, uint8_t cut_off = 0);
 
+  Generator* GenerateSilence(double seconds);
+
   void ConcatTones(const std::string& filename_result,
                    bool rem_tmp_files = true);
 

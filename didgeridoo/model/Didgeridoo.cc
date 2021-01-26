@@ -24,17 +24,39 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <main.h>
+#include <model/Didgeridoo.h>
 
-int main() {
-  auto generator = new Generator();
+void Didgeridoo::generate(Generator *generator, uint8_t length,
+                     uint8_t multiplier /*multiply tone and speed, max: 6*/) {
+  double len_per_tone = 0.0125;
+  auto tone = (rand() % 12) * multiplier;
+  bool odd = false;
+  uint8_t cut_off = 20;
 
-  Didgeridoo::generate(generator, 100, 1);
-  generator->ConcatTones("didgeridoo.wav");
-  helper::System::RunShellCommand("play didgeridoo.wav");
+  uint8_t j = 0;
+  for (uint8_t i = 0; i < length; i+= multiplier) {
+  if (odd) {
+  tone += ( (rand() % 10) > 4)
+  ? rand() % 4
+  : 1;
+  } else {
+  tone -= ( (rand() % 10) > 4)
+  ? rand() % 8
+  : 2;
+  }
 
-  helper::System::RunShellCommand("rm *.wav");
+  if (tone <= 0) {
+  tone = (rand() % 12) * multiplier;
+  }
 
-  delete generator;
+  if (j > 10) {
+  ++cut_off;
+  j = 0;
+  }
+
+  generator->GenerateTone(tone, len_per_tone, cut_off);
+
+  odd = !odd;
+  ++j;
+  }
 }
-

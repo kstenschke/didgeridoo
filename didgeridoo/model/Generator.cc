@@ -48,6 +48,16 @@ Generator* Generator::GenerateTone(
   return this;
 }
 
+Generator* Generator::GenerateSilence(double seconds) {
+  std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
+
+  GenerateFreq(0, seconds, filename, 0);
+
+  ++index_tone_;
+
+  return this;
+}
+
 void Generator::ConcatTones(const std::string& filename_result,
                             bool rem_tmp_files) {
   if (index_tone_ == 0) return;

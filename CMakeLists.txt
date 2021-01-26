@@ -12,8 +12,10 @@ add_executable(didgeridoo
         didgeridoo/main.cc
         didgeridoo/main.h
         didgeridoo/struct/pitch.h
-        didgeridoo/model/Generator.cc
-        didgeridoo/model/Generator.h
         didgeridoo/helper/helper_system.cc
         didgeridoo/helper/helper_system.h
+        didgeridoo/model/Generator.cc
+        didgeridoo/model/Generator.h
+        didgeridoo/model/Didgeridoo.cc
+        didgeridoo/model/Didgeridoo.h
 )
