@@ -4,8 +4,8 @@
   is NOT permitted without prior written consent.
 */
 
-#ifndef CLASS_HELPER_SYSTEM_H
-#define CLASS_HELPER_SYSTEM_H
+#ifndef DIDGERIDOO_HELPER_SYSTEM_H
+#define DIDGERIDOO_HELPER_SYSTEM_H
 
 #include <string>
 

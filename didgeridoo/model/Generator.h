@@ -24,14 +24,15 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef WAVER_BIN_GENERATOR_H_
-#define WAVER_BIN_GENERATOR_H_
+#ifndef DIDGERIDOO_MODEL_GENERATOR_H_
+#define DIDGERIDOO_MODEL_GENERATOR_H_
 
 #include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <helper/helper_system.h>
+#include <struct/pitch.h>
 
 class Generator {
  public:
@@ -58,4 +59,4 @@ class Generator {
   static double GetFrequencyByTone(uint8_t tone);
 };
 
-#endif //WAVER_BIN_GENERATOR_H_
+#endif //DIDGERIDOO_MODEL_GENERATOR_H_

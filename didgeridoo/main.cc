@@ -25,13 +25,6 @@
 */
 
 #include <main.h>
-#include <struct/pitch.h>
-#include <model/Generator.h>
-#include <helper/helper_system.h>
-
-void generateBlare(Generator *generator, uint8_t length,
-                   uint8_t multiplier  // multiply tone and speed, max: 6
-);
 
 int main() {
   auto generator = new Generator();
@@ -61,7 +54,8 @@ int main() {
 }
 
 // Generate "blare" of concatenated tones
-void generateBlare(Generator *generator, uint8_t len_blare, uint8_t multiplier) {
+void generateBlare(Generator *generator, uint8_t len_blare,
+                   uint8_t multiplier) {
   double len_per_tone = 0.0125;
   auto tone = (rand() % 12) * multiplier;
   bool odd = false;

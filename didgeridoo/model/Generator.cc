@@ -25,7 +25,6 @@
 */
 
 #include <model/Generator.h>
-#include <struct/pitch.h>
 
 Generator::Generator(double hz) {
   hz_ = hz;

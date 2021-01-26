@@ -24,3 +24,8 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <model/Generator.h>
+#include <helper/helper_system.h>
+
+void generateBlare(Generator *generator, uint8_t length,
+                   uint8_t multiplier  /*multiply tone and speed, max: 6*/);

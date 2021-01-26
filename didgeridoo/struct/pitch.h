@@ -24,8 +24,8 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef WAVER_WAVER_PITCHES_H_
-#define WAVER_WAVER_PITCHES_H_
+#ifndef DIDGERIDOO_STRUCT_PITCH_H_
+#define DIDGERIDOO_STRUCT_PITCH_H_
 
 struct Pitch {  // @see http://people.virginia.edu/~pdr4h/pitch-freq.html
   constexpr static const double C_4 = 261.626;
@@ -104,4 +104,4 @@ struct Pitch {  // @see http://people.virginia.edu/~pdr4h/pitch-freq.html
   constexpr static const double GS9 = 13289.752;
 };
 
-#endif //WAVER_WAVER_PITCHES_H_
+#endif //DIDGERIDOO_STRUCT_PITCH_H_
