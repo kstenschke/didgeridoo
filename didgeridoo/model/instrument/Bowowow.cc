@@ -24,39 +24,43 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <model/Didgeridoo.h>
+#include <didgeridoo/model/instrument/Bowowow.h>
 
-void Didgeridoo::generate(Generator *generator, uint8_t length,
-                     uint8_t multiplier /*multiply tone and speed, max: 6*/) {
-  double len_per_tone = 0.0125;
-  auto tone = (rand() % 12) * multiplier;
+void Bowowow::generate(Generator *generator, uint8_t length,
+                       uint8_t divider) {
+  double len_tone = .000025;
+  auto tone = (rand() % 12);
   bool odd = false;
   uint8_t cut_off = 20;
 
   uint8_t j = 0;
-  for (uint8_t i = 0; i < length; i+= multiplier) {
-  if (odd) {
-  tone += ( (rand() % 10) > 4)
-  ? rand() % 4
-  : 1;
-  } else {
-  tone -= ( (rand() % 10) > 4)
-  ? rand() % 8
-  : 2;
-  }
+  for (uint8_t i = 0; i < length; i += 1) {
+    if (odd) {
+      tone += ((rand() % 10) > 4)
+              ? rand() % 4
+              : 1;
+    } else {
+      tone -= ((rand() % 10) > 4)
+              ? rand() % 8
+              : 2;
+    }
 
-  if (tone <= 0) {
-  tone = (rand() % 12) * multiplier;
-  }
+    if (tone <= 0) {
+      tone = (rand() % 12) * divider;
+    }
 
-  if (j > 10) {
-  ++cut_off;
-  j = 0;
-  }
+    if (j > 6) {
+      odd = !odd;
+    }
 
-  generator->GenerateTone(tone, len_per_tone, cut_off);
+    if (j > 10) {
+      ++cut_off;
+      j = 0;
+    }
 
-  odd = !odd;
-  ++j;
+    generator->GenerateTone(tone, len_tone, cut_off);
+    len_tone += .0001;
+
+    ++j;
   }
 }

@@ -33,8 +33,11 @@ int main() {
   generator->ConcatTones("didgeridoo.wav");
   helper::System::RunShellCommand("play didgeridoo.wav");
 
-  helper::System::RunShellCommand("rm *.wav");
+//  Bowowow::generate(generator, 100, 4);
+//  generator->ConcatTones("bowowow.wav");
+//  helper::System::RunShellCommand("play bowowow.wav");
 
+  helper::System::RunShellCommand("rm *.wav");
   delete generator;
 }
 

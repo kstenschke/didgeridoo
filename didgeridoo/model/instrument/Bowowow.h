@@ -24,7 +24,17 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <helper/helper_system.h>
+#ifndef DIDGERIDOO_DIDGERIDOO_MODEL_INSTRUMENTX_H_
+#define DIDGERIDOO_DIDGERIDOO_MODEL_INSTRUMENTX_H_
+
+#include <cstdint>
+#include <cstdlib>
 #include <model/Generator.h>
-#include <didgeridoo/model/instrument/Didgeridoo.h>
-#include <didgeridoo/model/instrument/Bowowow.h>
+
+class Bowowow {
+ public:
+  static void generate(Generator *generator, uint8_t length,
+                       uint8_t multiplier /*multiply tone and speed, max: 6*/);
+};
+
+#endif //DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_

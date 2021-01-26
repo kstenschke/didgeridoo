@@ -16,6 +16,8 @@ add_executable(didgeridoo
         didgeridoo/helper/helper_system.h
         didgeridoo/model/Generator.cc
         didgeridoo/model/Generator.h
-        didgeridoo/model/Didgeridoo.cc
-        didgeridoo/model/Didgeridoo.h
+        didgeridoo/model/instrument/Didgeridoo.cc
+        didgeridoo/model/instrument/Didgeridoo.h
+        didgeridoo/model/instrument/Bowowow.cc
+        didgeridoo/model/instrument/Bowowow.h
 )
