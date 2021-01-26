@@ -35,7 +35,6 @@
 
 class Generator {
  public:
-  // Constructor
   explicit Generator(double hz = 44100);
 
   Generator* GenerateTone(
