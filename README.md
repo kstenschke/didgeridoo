@@ -12,7 +12,9 @@ quietschbox
 
 Parametrically generates and plays random audio samples.
 
-This project is an experiment w/o any specific goal but having some fun. 
+This project is an experiment w/o any specific goal but having some fun.
+
+![Screenshot](/assets/screenshot.png) 
 
 
 ## Dependencies
