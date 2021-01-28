@@ -24,24 +24,24 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <model/Generator.h>
+#include <model/WaveGenerator.h>
 
-Generator::Generator(double hz) {
+WaveGenerator::WaveGenerator(double hz) {
   hz_ = hz;
 }
 
-void Generator::WriteWord(std::ostream &outs, uint64_t value, uint16_t size) {
+void WaveGenerator::WriteWord(std::ostream &outs, uint64_t value, uint16_t size) {
   if (size == 0) size = sizeof(value);
 
   for (; size; --size, value >>= 8)
     outs.put(static_cast <char> (value & 0xFF));
 }
 
-Generator* Generator::GenerateTone(uint8_t tone,
-                                   double seconds,
-                                   uint8_t cut_off,
-                                   double pi_factor,
-                                   double slow_down_curve) {
+WaveGenerator* WaveGenerator::GenerateTone(uint8_t tone,
+                                           double seconds,
+                                           uint8_t cut_off,
+                                           double pi_factor,
+                                           double slow_down_curve) {
   std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
 
   GenerateFreq(GetFrequencyByTone(tone),
@@ -56,7 +56,7 @@ Generator* Generator::GenerateTone(uint8_t tone,
   return this;
 }
 
-Generator* Generator::GenerateSilence(double seconds) {
+WaveGenerator* WaveGenerator::GenerateSilence(double seconds) {
   std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
 
   GenerateFreq(0, seconds, filename, 0);
@@ -66,8 +66,8 @@ Generator* Generator::GenerateSilence(double seconds) {
   return this;
 }
 
-void Generator::ConcatTones(const std::string& filename_result,
-                            bool rem_tmp_files) {
+void WaveGenerator::ConcatTones(const std::string& filename_result,
+                                bool rem_tmp_files) {
   if (index_tone_ == 0) return;
 
   std::string filename_tone;
@@ -83,12 +83,12 @@ void Generator::ConcatTones(const std::string& filename_result,
   if (rem_tmp_files) helper::System::RunShellCommand("rm tmp_*.wav");
 }
 
-void Generator::GenerateFreq(double frequency,
-                             double seconds,
-                             const std::string& filename,
-                             uint8_t cut_off,
-                             double pi_factor,
-                             double slow_down_curve) {
+void WaveGenerator::GenerateFreq(double frequency,
+                                 double seconds,
+                                 const std::string& filename,
+                                 uint8_t cut_off,
+                                 double pi_factor,
+                                 double slow_down_curve) {
   std::ofstream f(filename, std::ios::binary);
 
   // Write file headers
@@ -155,7 +155,7 @@ void Generator::GenerateFreq(double frequency,
   WriteWord(f, file_length - 8, 4);
 }
 
-double Generator::GetFrequencyByTone(uint8_t tone) {
+double WaveGenerator::GetFrequencyByTone(uint8_t tone) {
   switch (tone) {
     case 0: return Pitch::C_4;
     case 1: return Pitch::CS4;

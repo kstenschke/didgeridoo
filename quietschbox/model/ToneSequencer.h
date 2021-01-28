@@ -24,29 +24,31 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
-#define DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
+#ifndef QUIETSCHBOX_QUIETSCHBOX_MODEL_TONESEQUENCER_H_
+#define QUIETSCHBOX_QUIETSCHBOX_MODEL_TONESEQUENCER_H_
 
 #include <cstdint>
 #include <cstdlib>
-#include <model/Generator.h>
+#include <model/WaveGenerator.h>
 
-class Didgeridoo {
+class ToneSequencer {
  public:
-  static void generate(Generator *generator, uint8_t len_total,
+  static void generate(WaveGenerator *generator, uint8_t len_total,
+                       double iteration_addendum,
                        double multiplier,
                        double sub_tone_len = 0.0125,
-                       uint8_t toggle_1_freq = 10,
+                       double toggle_1_freq = 10.0,
                        uint8_t inc_tone_rnd_factor = 10,
-                       uint8_t inc_tone_rnd_if_gt = 4,
+                       double inc_tone_rnd_if_gt = 4.0,
                        uint8_t inc_tone_rnd_max = 4,
-                       uint8_t inc_tone_static = 1,
+                       double inc_tone_static = 1.0,
                        uint8_t dec_tone_rnd_factor = 10,
-                       uint8_t dec_tone_rnd_if_gt = 4,
+                       double dec_tone_rnd_if_gt = 4.0,
                        uint8_t dec_tone_rnd_max = 8,
-                       uint8_t dec_tone_static = 2,
-                       uint8_t tone_reset_lower_limit = 0,
-                       uint8_t tone_reset_when_zero_rnd_factor = 40);
+                       double dec_tone_static = 2.0,
+                       double tone_lower_limit = 0.0,
+                       uint8_t tone_reset_when_zero_rnd_factor = 40,
+                       double cut_off_base = 20.0);
 };
 
-#endif //DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
+#endif //QUIETSCHBOX_QUIETSCHBOX_MODEL_TONESEQUENCER_H_

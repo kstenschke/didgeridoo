@@ -24,43 +24,45 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <didgeridoo/model/instrument/Bowowow.h>
+#ifndef QUIETSCHBOX_MODEL_GENERATOR_H_
+#define QUIETSCHBOX_MODEL_GENERATOR_H_
 
-void Bowowow::generate(Generator *generator, uint8_t length,
-                       uint8_t divider) {
-  double len_tone = .000025;
-  auto tone = (rand() % 12);
-  bool odd = false;
-  uint8_t cut_off = 20;
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <helper/helper_system.h>
+#include <struct/pitch.h>
 
-  uint8_t j = 0;
-  for (uint8_t i = 0; i < length; i += 1) {
-    if (odd) {
-      tone += ((rand() % 10) > 4)
-              ? rand() % 4
-              : 1;
-    } else {
-      tone -= ((rand() % 10) > 4)
-              ? rand() % 8
-              : 2;
-    }
+class WaveGenerator {
+ public:
+  explicit WaveGenerator(double hz = 44100);
 
-    if (tone <= 0) {
-      tone = (rand() % 12) * divider;
-    }
+  WaveGenerator* GenerateTone(uint8_t tone, double seconds = 0.5,
+                              uint8_t cut_off = 0,
+                              double pi_factor = 2.0,
+                              double slow_down_curve = 1.0);
 
-    if (j > 6) {
-      odd = !odd;
-    }
+  WaveGenerator* GenerateSilence(double seconds);
 
-    if (j > 10) {
-      ++cut_off;
-      j = 0;
-    }
+  void ConcatTones(const std::string& filename_result,
+                   bool rem_tmp_files = true);
 
-    generator->GenerateTone(tone, len_tone, cut_off);
-    len_tone += .0001;
+ private:
+  uint8_t index_tone_ = 0;
 
-    ++j;
-  }
-}
+  double hz_;
+
+  void GenerateFreq(double frequency,
+                    double seconds,
+                    const std::string& filename,
+                    uint8_t cut_off = 0,
+                    double pi_factor = 2.0,
+                    double slow_down_curve = 1.0);
+
+  static void WriteWord(std::ostream &outs, uint64_t value, uint16_t size = 0);
+
+  static double GetFrequencyByTone(uint8_t tone);
+};
+
+#endif //QUIETSCHBOX_MODEL_GENERATOR_H_

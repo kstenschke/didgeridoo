@@ -24,8 +24,19 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <helper/helper_gtk.h>
 #include <helper/helper_system.h>
-#include <model/Generator.h>
-#include <didgeridoo/model/instrument/Didgeridoo.h>
-#include <didgeridoo/model/instrument/Bowowow.h>
-#include <didgeridoo/model/instrument/Xxx.h>
+#include <model/WaveGenerator.h>
+#include <model/ToneSequencer.h>
+#include <gtk/gtk.h>
+
+class optionsContainer {
+ public:
+  GtkAdjustment *total_length_;
+  GtkAdjustment *it_inc_by_;
+  GtkAdjustment *sub_tone_base_len_;
+  GtkAdjustment *inc_tone_rnd_max_;
+  GtkAdjustment *cut_off_base_;
+  GtkAdjustment *dec_tone_rnd_factor_;
+  GtkAdjustment *dec_tone_;
+};

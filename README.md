@@ -1,5 +1,5 @@
-Didgeridoo
-==========
+quietschbox
+===========
 
 ## Table of Contents
 
@@ -10,10 +10,9 @@ Didgeridoo
 
 ## What does it do?
 
-Generates and plays random sounds.
+Parametrically generates and plays random audio samples.
 
-This project is an experiment of playing with audio generation, w/o any specific
-goal but having some fun.
+This project is an experiment w/o any specific goal but having some fun. 
 
 
 ## Dependencies

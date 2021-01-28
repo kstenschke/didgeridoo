@@ -19,29 +19,57 @@
   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NGtk::AddBox(window, true, true);EGLIGENCE OR OTHERWISE)
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <main.h>
+#include <helper/helper_gtk.h>
 
-int main() {
-  auto generator = new Generator();
+namespace helper {
+namespace Gtk {
 
-  Didgeridoo::generate(generator, 100, 1.0, 0.01, 10, 10, 4, 4 /*20*/);
-  generator->ConcatTones("didgeridoo.wav");
-  helper::System::RunShellCommand("play didgeridoo.wav");
+GtkWidget *AddBox(const GtkWidget *parent, bool horizontal,
+                  bool parent_is_window) {
+  GtkWidget *box;
+  box = gtk_box_new(
+      horizontal ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL,
+      0);
 
-//  Bowowow::generate(generator, 100, 4);
-//  generator->ConcatTones("bowowow.wav");
-//  helper::System::RunShellCommand("play bowowow.wav");
+  if (parent_is_window)
+    gtk_container_add (GTK_CONTAINER(parent), box);
+  else
+    gtk_box_pack_start(GTK_BOX(parent), box, TRUE, TRUE, 10);
 
-//  Xxx::generate(generator, 100, 4);
-//  generator->ConcatTones("bowowow.wav");
-//  helper::System::RunShellCommand("play bowowow.wav");
-
-  helper::System::RunShellCommand("rm *.wav");
-  delete generator;
+  return box;
 }
 
+GtkWidget *AddLabel(const GtkWidget *parent_box, const std::string& text) {
+  GtkWidget *label;
+  label = gtk_label_new (text.c_str());
+  gtk_box_pack_start(GTK_BOX (parent_box), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX (parent_box), label, TRUE, TRUE, 0);
+  gtk_widget_show(label);
+
+  return label;
+}
+
+GtkWidget *AddButton(const GtkWidget *parent, const std::string& text) {
+  GtkWidget *button;
+  button = gtk_button_new_with_label (text.c_str());
+  gtk_container_add (GTK_CONTAINER(parent), button);
+
+  return button;
+}
+
+void AddScale(const GtkWidget *parent_box, GtkAdjustment *adjustment) {
+  GtkWidget *scale;
+  scale = gtk_scale_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT(adjustment));
+
+  gtk_scale_set_digits(GTK_SCALE(scale), 0);
+  gtk_box_pack_start(GTK_BOX(parent_box), scale, TRUE, TRUE, 0);
+  gtk_widget_show (scale);
+}
+
+}  // namespace Gtk
+}  // namespace helper

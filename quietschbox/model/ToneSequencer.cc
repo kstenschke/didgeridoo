@@ -24,32 +24,33 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <didgeridoo/model/instrument/Didgeridoo.h>
+#include <model/ToneSequencer.h>
 
-void Didgeridoo::generate(Generator *generator,
-                          uint8_t len_total,
-                          double multiplier,
-                          double sub_tone_len,
-                          uint8_t toggle_1_freq,
-                          uint8_t inc_tone_rnd_factor,
-                          uint8_t inc_tone_rnd_if_gt,
-                          uint8_t inc_tone_rnd_max,
-                          uint8_t inc_tone_static,
-                          uint8_t dec_tone_rnd_factor,
-                          uint8_t dec_tone_rnd_if_gt,
-                          uint8_t dec_tone_rnd_max,
-                          uint8_t dec_tone_static,
-                          uint8_t tone_reset_lower_limit,
-                          uint8_t tone_reset_when_zero_rnd_factor) {
+void ToneSequencer::generate(WaveGenerator *generator,
+                             uint8_t len_total,
+                             double iteration_addendum,
+                             double multiplier,
+                             double sub_tone_len,
+                             double toggle_1_freq,
+                             uint8_t inc_tone_rnd_factor,
+                             double inc_tone_rnd_if_gt,
+                             uint8_t inc_tone_rnd_max,
+                             double inc_tone_static,
+                             uint8_t dec_tone_rnd_factor,
+                             double dec_tone_rnd_if_gt,
+                             uint8_t dec_tone_rnd_max,
+                             double dec_tone_static,
+                             double tone_lower_limit,
+                             uint8_t tone_reset_when_zero_rnd_factor,
+                             double cut_off_base) {
   auto tone = (rand() % 12) * multiplier;
-  uint8_t cut_off = 20;
+  uint8_t cut_off = cut_off_base;
 
   bool toggle_1 = false;
 
   uint8_t counter_1 = 0;
-  uint8_t k, l, m, n = 0;
 
-  for (uint8_t i = 0; i < len_total; i += multiplier) {
+  for (uint8_t i = 0; i < len_total; i += iteration_addendum) {
     if (toggle_1) {
       tone += ((rand() % inc_tone_rnd_factor) > inc_tone_rnd_if_gt)
               ? rand() % inc_tone_rnd_max
@@ -60,7 +61,11 @@ void Didgeridoo::generate(Generator *generator,
               : dec_tone_static;
     }
 
-    if (tone <= tone_reset_lower_limit) {
+    if (tone > 68) {
+      tone = 0;
+    }
+
+    if (tone <= tone_lower_limit) {
       tone = (rand() % tone_reset_when_zero_rnd_factor) * multiplier;
     }
 
