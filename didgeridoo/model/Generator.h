@@ -38,8 +38,10 @@ class Generator {
  public:
   explicit Generator(double hz = 44100);
 
-  Generator* GenerateTone(
-      uint8_t tone, double seconds   = 0.5, uint8_t cut_off = 0);
+  Generator* GenerateTone(uint8_t tone, double seconds = 0.5,
+                          uint8_t cut_off = 0,
+                          double pi_factor = 2.0,
+                          double slow_down_curve = 1.0);
 
   Generator* GenerateSilence(double seconds);
 
@@ -54,7 +56,9 @@ class Generator {
   void GenerateFreq(double frequency,
                     double seconds,
                     const std::string& filename,
-                    uint8_t cut_off);
+                    uint8_t cut_off = 0,
+                    double pi_factor = 2.0,
+                    double slow_down_curve = 1.0);
 
   static void WriteWord(std::ostream &outs, uint64_t value, uint16_t size = 0);
 

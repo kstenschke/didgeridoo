@@ -28,3 +28,4 @@
 #include <model/Generator.h>
 #include <didgeridoo/model/instrument/Didgeridoo.h>
 #include <didgeridoo/model/instrument/Bowowow.h>
+#include <didgeridoo/model/instrument/Xxx.h>

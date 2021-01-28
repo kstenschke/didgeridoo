@@ -26,37 +26,56 @@
 
 #include <didgeridoo/model/instrument/Didgeridoo.h>
 
-void Didgeridoo::generate(Generator *generator, uint8_t length,
-                     uint8_t multiplier /*multiply tone and speed, max: 6*/) {
-  double len_per_tone = 0.0125;
+void Didgeridoo::generate(Generator *generator,
+                          uint8_t len_total,
+                          double multiplier,
+                          double sub_tone_len,
+                          uint8_t toggle_1_freq,
+                          uint8_t inc_tone_rnd_factor,
+                          uint8_t inc_tone_rnd_if_gt,
+                          uint8_t inc_tone_rnd_max,
+                          uint8_t inc_tone_static,
+                          uint8_t dec_tone_rnd_factor,
+                          uint8_t dec_tone_rnd_if_gt,
+                          uint8_t dec_tone_rnd_max,
+                          uint8_t dec_tone_static,
+                          uint8_t tone_reset_lower_limit,
+                          uint8_t tone_reset_when_zero_rnd_factor) {
   auto tone = (rand() % 12) * multiplier;
-  bool odd = false;
   uint8_t cut_off = 20;
 
-  uint8_t j = 0;
-  for (uint8_t i = 0; i < length; i+= multiplier) {
-  if (odd) {
-  tone += ( (rand() % 10) > 4)
-  ? rand() % 4
-  : 1;
-  } else {
-  tone -= ( (rand() % 10) > 4)
-  ? rand() % 8
-  : 2;
-  }
+  bool toggle_1 = false;
 
-  if (tone <= 0) {
-  tone = (rand() % 12) * multiplier;
-  }
+  uint8_t counter_1 = 0;
+  uint8_t k, l, m, n = 0;
 
-  if (j > 10) {
-  ++cut_off;
-  j = 0;
-  }
+  for (uint8_t i = 0; i < len_total; i += multiplier) {
+    if (toggle_1) {
+      tone += ((rand() % inc_tone_rnd_factor) > inc_tone_rnd_if_gt)
+              ? rand() % inc_tone_rnd_max
+              : inc_tone_static;
+    } else {
+      tone -= ((rand() % dec_tone_rnd_factor) > dec_tone_rnd_if_gt)
+              ? rand() % dec_tone_rnd_max
+              : dec_tone_static;
+    }
 
-  generator->GenerateTone(tone, len_per_tone, cut_off);
+    if (tone <= tone_reset_lower_limit) {
+      tone = (rand() % tone_reset_when_zero_rnd_factor) * multiplier;
+    }
 
-  odd = !odd;
-  ++j;
+    if (counter_1 > toggle_1_freq) {
+      ++cut_off;
+      counter_1 = 0;
+    }
+
+    generator->GenerateTone(tone,
+                            sub_tone_len,
+                            cut_off,
+                            2.0,
+                            1.0);
+
+    toggle_1 = !toggle_1;
+    ++counter_1;
   }
 }

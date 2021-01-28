@@ -24,29 +24,17 @@
   POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
-#define DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_
+#ifndef DIDGERIDOO_DIDGERIDOO_MODEL_XXX_H_
+#define DIDGERIDOO_DIDGERIDOO_MODEL_XXX_H_
 
 #include <cstdint>
 #include <cstdlib>
 #include <model/Generator.h>
 
-class Didgeridoo {
+class Xxx {
  public:
-  static void generate(Generator *generator, uint8_t len_total,
-                       double multiplier,
-                       double sub_tone_len = 0.0125,
-                       uint8_t toggle_1_freq = 10,
-                       uint8_t inc_tone_rnd_factor = 10,
-                       uint8_t inc_tone_rnd_if_gt = 4,
-                       uint8_t inc_tone_rnd_max = 4,
-                       uint8_t inc_tone_static = 1,
-                       uint8_t dec_tone_rnd_factor = 10,
-                       uint8_t dec_tone_rnd_if_gt = 4,
-                       uint8_t dec_tone_rnd_max = 8,
-                       uint8_t dec_tone_static = 2,
-                       uint8_t tone_reset_lower_limit = 0,
-                       uint8_t tone_reset_when_zero_rnd_factor = 40);
+  static void generate(Generator *generator, uint8_t length,
+                       uint8_t multiplier /*multiply tone and speed, max: 6*/);
 };
 
 #endif //DIDGERIDOO_DIDGERIDOO_MODEL_DIDGERIDOO_H_

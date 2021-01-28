@@ -37,11 +37,19 @@ void Generator::WriteWord(std::ostream &outs, uint64_t value, uint16_t size) {
     outs.put(static_cast <char> (value & 0xFF));
 }
 
-Generator* Generator::GenerateTone(
-    uint8_t tone, double seconds, uint8_t cut_off) {
+Generator* Generator::GenerateTone(uint8_t tone,
+                                   double seconds,
+                                   uint8_t cut_off,
+                                   double pi_factor,
+                                   double slow_down_curve) {
   std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
 
-  GenerateFreq(GetFrequencyByTone(tone), seconds, filename, cut_off);
+  GenerateFreq(GetFrequencyByTone(tone),
+               seconds,
+               filename,
+               cut_off,
+               pi_factor,
+               slow_down_curve);
 
   ++index_tone_;
 
@@ -78,7 +86,9 @@ void Generator::ConcatTones(const std::string& filename_result,
 void Generator::GenerateFreq(double frequency,
                              double seconds,
                              const std::string& filename,
-                             uint8_t cut_off = 0) {
+                             uint8_t cut_off,
+                             double pi_factor,
+                             double slow_down_curve) {
   std::ofstream f(filename, std::ios::binary);
 
   // Write file headers
@@ -102,7 +112,7 @@ void Generator::GenerateFreq(double frequency,
   // Write the audio samples
   // (We'll generate a single C4 note with a sine wave,
   // fading from left to right)
-  constexpr double two_pi = 6.283185307179586476925286766559;
+  double pi = 3.162 * pi_factor;
   constexpr double max_amplitude = 32760;  // "volume"
 
   int N = hz_ * seconds;  // total number of samples
@@ -111,7 +121,7 @@ void Generator::GenerateFreq(double frequency,
 
   for (int n = 0; n < N; n++) {
     double amplitude = (double)n / N * max_amplitude;
-    double value     = sin( (two_pi * n * frequency) / hz_ );
+    double value     = sin( (pi * n/slow_down_curve * frequency) / hz_ );
 
     if (0 < cut_off) {
       ++o;

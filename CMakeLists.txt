@@ -20,4 +20,6 @@ add_executable(didgeridoo
         didgeridoo/model/instrument/Didgeridoo.h
         didgeridoo/model/instrument/Bowowow.cc
         didgeridoo/model/instrument/Bowowow.h
+        didgeridoo/model/instrument/Xxx.cc
+        didgeridoo/model/instrument/Xxx.h
 )

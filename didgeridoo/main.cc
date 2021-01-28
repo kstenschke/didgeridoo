@@ -29,11 +29,15 @@
 int main() {
   auto generator = new Generator();
 
-  Didgeridoo::generate(generator, 100, 1);
+  Didgeridoo::generate(generator, 100, 1.0, 0.01, 10, 10, 4, 4 /*20*/);
   generator->ConcatTones("didgeridoo.wav");
   helper::System::RunShellCommand("play didgeridoo.wav");
 
 //  Bowowow::generate(generator, 100, 4);
+//  generator->ConcatTones("bowowow.wav");
+//  helper::System::RunShellCommand("play bowowow.wav");
+
+//  Xxx::generate(generator, 100, 4);
 //  generator->ConcatTones("bowowow.wav");
 //  helper::System::RunShellCommand("play bowowow.wav");
 
