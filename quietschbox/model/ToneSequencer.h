@@ -33,8 +33,10 @@
 
 class ToneSequencer {
  public:
-  static void generate(WaveGenerator *generator, uint8_t len_total,
-                       double iteration_addendum,
+  static void generate(WaveGenerator *generator,
+                       uint8_t len_total,
+                       uint8_t length_factor,
+                       double step_size,
                        double multiplier,
                        double sub_tone_len = 0.0125,
                        double toggle_1_freq = 10.0,

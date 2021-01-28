@@ -28,7 +28,8 @@
 
 void ToneSequencer::generate(WaveGenerator *generator,
                              uint8_t len_total,
-                             double iteration_addendum,
+                             uint8_t length_factor,
+                             double step_size,
                              double multiplier,
                              double sub_tone_len,
                              double toggle_1_freq,
@@ -50,7 +51,9 @@ void ToneSequencer::generate(WaveGenerator *generator,
 
   uint8_t counter_1 = 0;
 
-  for (uint8_t i = 0; i < len_total; i += iteration_addendum) {
+  uint64_t kI = len_total * length_factor;
+
+  for (uint64_t i = 0; i < kI; i += step_size) {
     if (toggle_1) {
       tone += ((rand() % inc_tone_rnd_factor) > inc_tone_rnd_if_gt)
               ? rand() % inc_tone_rnd_max

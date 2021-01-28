@@ -29,11 +29,14 @@
 optionsContainer* adjustments;  // global (ugly) accessible slider adjustments
 
 void InitSliderAdjustments();
+void Randomize();
 
 static void IncTotalLen100 (GtkWidget *widget, gpointer data);
 static void DecTotalLen100 (GtkWidget *widget, gpointer data);
+static void DoubleLengthFactor(GtkWidget *widget, gpointer data);
 static void IncCutOffBase10 (GtkWidget *widget, gpointer data);
 static void DecCutOffBase10 (GtkWidget *widget, gpointer data);
+
 static void PlaySample (GtkWidget *widget, gpointer data);
 
 static void Activate (GtkApplication* app, gpointer user_data) {
@@ -52,8 +55,8 @@ static void Activate (GtkApplication* app, gpointer user_data) {
 
   // add sliders
   GtkWidget *box1 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box1, "Total length:  ");
-  helper::Gtk::AddScale(box1, adjustments->total_length_);
+  helper::Gtk::AddLabel(box1, "Sequence length:  ");
+  helper::Gtk::AddScale(box1, adjustments->sequence_length_);
 
   GtkWidget *button_total_len_dec = helper::Gtk::AddButton(box1, "-100");
   g_signal_connect(button_total_len_dec, "clicked",
@@ -63,10 +66,17 @@ static void Activate (GtkApplication* app, gpointer user_data) {
   g_signal_connect(button_total_len_inc, "clicked",
                    G_CALLBACK(IncTotalLen100), NULL);
 
+  helper::Gtk::AddLabel(box1, "Length factor:  ");
+  helper::Gtk::AddScale(box1, adjustments->length_factor_);
+
+  GtkWidget *button_double_len_fact = helper::Gtk::AddButton(box1, "x2");
+  g_signal_connect(button_double_len_fact, "clicked",
+                   G_CALLBACK(DoubleLengthFactor), NULL);
+
   // add slider
   GtkWidget *box2 = helper::Gtk::AddBox(box_main);
   helper::Gtk::AddLabel(box2, "Step size:  ");
-  helper::Gtk::AddScale(box2, adjustments->it_inc_by_);
+  helper::Gtk::AddScale(box2, adjustments->step_size_);
 
   // add slider
   GtkWidget *box3 = helper::Gtk::AddBox(box_main);
@@ -88,26 +98,40 @@ static void Activate (GtkApplication* app, gpointer user_data) {
   g_signal_connect(button_cut_off_base_inc, "clicked",
                    G_CALLBACK(IncCutOffBase10), NULL);
 
-  // add slider
+  // add sliders: sub-tone randomization
   GtkWidget *box5 = helper::Gtk::AddBox(box_main);
   helper::Gtk::AddLabel(box5, "Sub-tone[-] RND factor:  ");
-  helper::Gtk::AddScale(box5, adjustments->dec_tone_);
+  helper::Gtk::AddScale(box5, adjustments->dec_tone_rnd_factor_);
+
+  helper::Gtk::AddLabel(box5, "Sub-tone[++] RND max.:  ");
+  helper::Gtk::AddScale(box5, adjustments->inc_tone_rnd_max_);
 
   // add slider
   GtkWidget *box6 = helper::Gtk::AddBox(box_main);
   helper::Gtk::AddLabel(box6, "Sub-tone decline:  ");
   helper::Gtk::AddScale(box6, adjustments->dec_tone_);
 
-  // add slider
-  GtkWidget *box7 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box7, "Sub-tone[++] RND max.:  ");
-  helper::Gtk::AddScale(box7, adjustments->inc_tone_rnd_max_);
+  // add fx sliders
+  GtkWidget *boxFx1 = helper::Gtk::AddBox(box_main);
+  helper::Gtk::AddLabel(boxFx1, "Fade-in:  ");
+  helper::Gtk::AddScale(boxFx1, adjustments->fx_fade_in_);
+
+  GtkWidget *boxFx2 = helper::Gtk::AddBox(box_main);
+  helper::Gtk::AddLabel(boxFx2, "Band:  ");
+  helper::Gtk::AddScale(boxFx2, adjustments->fx_band_);
+
+  helper::Gtk::AddLabel(boxFx2, "Contrast:  ");
+  helper::Gtk::AddScale(boxFx2, adjustments->fx_contrast_);
 
   helper::Gtk::AddBox(box_main);  // spacing between sliders and options
 
   GtkWidget *box_bottom = helper::Gtk::AddBox(box_main);
+
   GtkWidget *button_play = helper::Gtk::AddButton(box_bottom, "▶");
   g_signal_connect (button_play, "clicked", G_CALLBACK(PlaySample), NULL);
+
+  GtkWidget *button_randomize = helper::Gtk::AddButton(box_bottom, "⚄ Random");
+  g_signal_connect (button_randomize, "clicked", G_CALLBACK(Randomize), NULL);
 
   gtk_widget_show_all (window);
 }
@@ -128,10 +152,13 @@ int main(int argc, char **argv) {
 }
 
 void InitSliderAdjustments() {
-  adjustments->total_length_ =
+  adjustments->sequence_length_ =
       gtk_adjustment_new (100.0, 0.0, 1500.0, 1.0, 1.0, 0.0);
 
-  adjustments->it_inc_by_ =
+  adjustments->length_factor_ =
+      gtk_adjustment_new (1.0, 1.0, 100.0, 1.0, 1.0, 0.0);
+
+  adjustments->step_size_ =
       gtk_adjustment_new (1.0, 1.0, 50.0, 1.0, 1.0, 0.0);
 
   adjustments->sub_tone_base_len_ =
@@ -148,18 +175,55 @@ void InitSliderAdjustments() {
 
   adjustments->inc_tone_rnd_max_ =
       gtk_adjustment_new(4.0, 0.0, 100.0, 1.0, 1.0, 0.0);
+
+  // effects
+  adjustments->fx_band_ =
+      gtk_adjustment_new(0.0, 0.0, 970.0, 1.0, 1.0, 0.0);
+
+  adjustments->fx_contrast_ =
+      gtk_adjustment_new(0.0, 0.0, 100.0, 1.0, 1.0, 0.0);
+
+  adjustments->fx_fade_in_ =
+      gtk_adjustment_new(0.0, 0.0, 100.0, 1.0, 1.0, 0.0);
+}
+
+void Randomize() {
+  gtk_adjustment_set_value(adjustments->step_size_,
+                           1 + (rand() % 49));  // min: 1, max: 50
+
+  gtk_adjustment_set_value(adjustments->sub_tone_base_len_,
+                           10 + (rand() % 290));  // min: 10, max: 300
+
+  gtk_adjustment_set_value(adjustments->cut_off_base_,
+                           (rand() % 300));  // min: 0, max: 300
+
+  gtk_adjustment_set_value(adjustments->dec_tone_rnd_factor_,
+                           1 + (rand() % 67));  // min: 1, max: 68
+
+  gtk_adjustment_set_value(adjustments->dec_tone_,
+                           1 + (rand() % 67));  // min: 1, max: 68
+
+  gtk_adjustment_set_value(adjustments->dec_tone_,
+                           (rand() % 100));  // min: 0, max: 100
+
+  // effects
+  gtk_adjustment_set_value(adjustments->fx_band_,
+                           (rand() % 970));  // min: 0, max: 970
+
+  gtk_adjustment_set_value(adjustments->fx_contrast_,
+                           (rand() % 100));  // min: 0, max: 100
 }
 
 static void IncTotalLen100 (GtkWidget *widget, gpointer data) {
-  auto value = gtk_adjustment_get_value(adjustments->total_length_);
+  auto value = gtk_adjustment_get_value(adjustments->sequence_length_);
 
-  gtk_adjustment_set_value(adjustments->total_length_, value + 100.0);
+  gtk_adjustment_set_value(adjustments->sequence_length_, value + 100.0);
 }
 
 static void DecTotalLen100 (GtkWidget *widget, gpointer data) {
-  auto value = gtk_adjustment_get_value(adjustments->total_length_);
+  auto value = gtk_adjustment_get_value(adjustments->sequence_length_);
 
-  gtk_adjustment_set_value(adjustments->total_length_, value - 100.0);
+  gtk_adjustment_set_value(adjustments->sequence_length_, value - 100.0);
 }
 
 static void IncCutOffBase10 (GtkWidget *widget, gpointer data) {
@@ -168,10 +232,16 @@ static void IncCutOffBase10 (GtkWidget *widget, gpointer data) {
   gtk_adjustment_set_value(adjustments->cut_off_base_, value + 10.0);
 }
 
-static void DecCutOffBase10 (GtkWidget *widget, gpointer data) {
+static void DecCutOffBase10(GtkWidget *widget, gpointer data) {
   auto value = gtk_adjustment_get_value(adjustments->cut_off_base_);
 
   gtk_adjustment_set_value(adjustments->cut_off_base_, value - 10.0);
+}
+
+static void DoubleLengthFactor(GtkWidget *widget, gpointer data) {
+  auto value = gtk_adjustment_get_value(adjustments->length_factor_);
+
+  gtk_adjustment_set_value(adjustments->length_factor_, value * 2.0);
 }
 
 static void PlaySample (GtkWidget *widget, gpointer data) {
@@ -181,8 +251,9 @@ static void PlaySample (GtkWidget *widget, gpointer data) {
 
   ToneSequencer::generate(
       generator,
-      gtk_adjustment_get_value(adjustments->total_length_),
-      gtk_adjustment_get_value(adjustments->it_inc_by_),
+      gtk_adjustment_get_value(adjustments->sequence_length_),
+      gtk_adjustment_get_value(adjustments->length_factor_),
+      gtk_adjustment_get_value(adjustments->step_size_),
       1.0,
       gtk_adjustment_get_value(adjustments->sub_tone_base_len_) / 5000.0,
       10,
@@ -197,7 +268,22 @@ static void PlaySample (GtkWidget *widget, gpointer data) {
 
   generator->ConcatTones("out.wav");
 
-  helper::System::RunShellCommand("play -q --norm out.wav");
+  std::string cmd = "play -q --norm out.wav";
+
+  int band = gtk_adjustment_get_value(adjustments->fx_band_);
+  if (band > 0) cmd += " band " + std::to_string(10000 - band * 10);
+
+  int contrast = gtk_adjustment_get_value(adjustments->fx_contrast_);
+  if (contrast > 0) cmd += " contrast " + std::to_string(contrast);
+
+  int fade = gtk_adjustment_get_value(adjustments->fx_fade_in_);
+  if (fade > 0) cmd += " fade " + std::to_string(fade / 100.0);
+
+//  cmd += " fade 0.5";
+//  cmd += " echo 0.8 0.88 60 0.4";
+//  cmd += " earwax";
+
+  helper::System::RunShellCommand(cmd.c_str());
 
   delete generator;
 }

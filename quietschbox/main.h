@@ -32,11 +32,16 @@
 
 class optionsContainer {
  public:
-  GtkAdjustment *total_length_;
-  GtkAdjustment *it_inc_by_;
+  GtkAdjustment *sequence_length_;
+  GtkAdjustment *length_factor_;
+  GtkAdjustment *step_size_;
   GtkAdjustment *sub_tone_base_len_;
   GtkAdjustment *inc_tone_rnd_max_;
   GtkAdjustment *cut_off_base_;
   GtkAdjustment *dec_tone_rnd_factor_;
   GtkAdjustment *dec_tone_;
+
+  GtkAdjustment *fx_band_;
+  GtkAdjustment *fx_contrast_;
+  GtkAdjustment *fx_fade_in_;
 };

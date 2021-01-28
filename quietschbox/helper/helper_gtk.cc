@@ -39,7 +39,7 @@ GtkWidget *AddBox(const GtkWidget *parent, bool horizontal,
   if (parent_is_window)
     gtk_container_add (GTK_CONTAINER(parent), box);
   else
-    gtk_box_pack_start(GTK_BOX(parent), box, TRUE, TRUE, 10);
+    gtk_box_pack_start(GTK_BOX(parent), box, TRUE, TRUE, 4);
 
   return box;
 }
