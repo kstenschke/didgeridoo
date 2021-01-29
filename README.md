@@ -1,5 +1,5 @@
-quietschbox
-===========
+quietschbox Tone Generator
+==========================
 
 ## Table of Contents
 
