@@ -17,7 +17,8 @@ Parametrically generates and plays random audio samples.
 
 ## Dependencies
 
-* [sox](http://sox.sourceforge.net/) 
+* [GTK](https://www.gtk.org)
+* [SoX](http://sox.sourceforge.net/) 
 
 
 ## Author and License
