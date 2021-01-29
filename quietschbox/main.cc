@@ -44,7 +44,7 @@ static void Activate (GtkApplication* app, gpointer user_data) {
   window = gtk_application_window_new (app);
 
   gtk_window_set_title (GTK_WINDOW (window), "quietschBox");
-  gtk_window_set_default_size (GTK_WINDOW (window), 800, 500);
+  gtk_window_set_default_size (GTK_WINDOW (window), 900, 420);
   gtk_window_set_resizable(GTK_WINDOW (window), FALSE);
   gtk_window_set_keep_above(GTK_WINDOW (window), TRUE);
 
@@ -55,7 +55,7 @@ static void Activate (GtkApplication* app, gpointer user_data) {
 
   // add sliders
   GtkWidget *box1 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box1, "Sequence length:  ");
+  helper::Gtk::AddLabel(box1, "⇥ Sequence length:  ");
   helper::Gtk::AddScale(box1, adjustments->sequence_length_);
 
   GtkWidget *button_total_len_dec = helper::Gtk::AddButton(box1, "-100");
@@ -66,7 +66,7 @@ static void Activate (GtkApplication* app, gpointer user_data) {
   g_signal_connect(button_total_len_inc, "clicked",
                    G_CALLBACK(IncTotalLen100), NULL);
 
-  helper::Gtk::AddLabel(box1, "Length factor:  ");
+  helper::Gtk::AddLabel(box1, "  ✕ Length factor:  ");
   helper::Gtk::AddScale(box1, adjustments->length_factor_);
 
   GtkWidget *button_double_len_fact = helper::Gtk::AddButton(box1, "x2");
@@ -75,52 +75,51 @@ static void Activate (GtkApplication* app, gpointer user_data) {
 
   // add slider
   GtkWidget *box2 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box2, "Step size:  ");
+  helper::Gtk::AddLabel(box2, "↷ Step size:  ");
   helper::Gtk::AddScale(box2, adjustments->step_size_);
+
+  helper::Gtk::AddLabel(box2, "  ⇢ Sub-tone base length:  ");
+  helper::Gtk::AddScale(box2, adjustments->sub_tone_base_len_);
 
   // add slider
   GtkWidget *box3 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box3, "Sub-tone base length:  ");
+  helper::Gtk::AddLabel(box3, "✂ Cut-off base:  ");
 
-  helper::Gtk::AddScale(box3, adjustments->sub_tone_base_len_);
+  helper::Gtk::AddScale(box3, adjustments->cut_off_base_);
 
-  // add slider
-  GtkWidget *box4 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box4, "Cut-off base:  ");
-
-  helper::Gtk::AddScale(box4, adjustments->cut_off_base_);
-
-  GtkWidget *button_cut_off_base_dec = helper::Gtk::AddButton(box4, "-10");
+  GtkWidget *button_cut_off_base_dec = helper::Gtk::AddButton(box3, "-10");
   g_signal_connect(button_cut_off_base_dec, "clicked",
                    G_CALLBACK(DecCutOffBase10), NULL);
 
-  GtkWidget *button_cut_off_base_inc = helper::Gtk::AddButton(box4, "+10");
+  GtkWidget *button_cut_off_base_inc = helper::Gtk::AddButton(box3, "+10");
   g_signal_connect(button_cut_off_base_inc, "clicked",
                    G_CALLBACK(IncCutOffBase10), NULL);
 
   // add sliders: sub-tone randomization
-  GtkWidget *box5 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box5, "Sub-tone[-] RND factor:  ");
-  helper::Gtk::AddScale(box5, adjustments->dec_tone_rnd_factor_);
+  GtkWidget *box4 = helper::Gtk::AddBox(box_main);
+  helper::Gtk::AddLabel(box4, "⊖ Sub-tone RND factor:  ");
+  helper::Gtk::AddScale(box4, adjustments->dec_tone_rnd_factor_);
 
-  helper::Gtk::AddLabel(box5, "Sub-tone[++] RND max.:  ");
-  helper::Gtk::AddScale(box5, adjustments->inc_tone_rnd_max_);
+  helper::Gtk::AddLabel(box4, "  ⊖ Sub-tone RND max.:  ");
+  helper::Gtk::AddScale(box4, adjustments->inc_tone_rnd_max_);
 
   // add slider
-  GtkWidget *box6 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(box6, "Sub-tone decline:  ");
-  helper::Gtk::AddScale(box6, adjustments->dec_tone_);
+  GtkWidget *box5 = helper::Gtk::AddBox(box_main);
+  helper::Gtk::AddLabel(box5, "↘ Sub-tone decline:  ");
+  helper::Gtk::AddScale(box5, adjustments->dec_tone_);
+
+  helper::Gtk::AddBox(box_main);  // spacing between generator and fx sliders
 
   // add fx sliders
   GtkWidget *boxFx1 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(boxFx1, "Fade-in:  ");
+  helper::Gtk::AddLabel(boxFx1, "⊿ Fade-in:  ");
   helper::Gtk::AddScale(boxFx1, adjustments->fx_fade_in_);
 
   GtkWidget *boxFx2 = helper::Gtk::AddBox(box_main);
-  helper::Gtk::AddLabel(boxFx2, "Band:  ");
+  helper::Gtk::AddLabel(boxFx2, "– Band:  ");
   helper::Gtk::AddScale(boxFx2, adjustments->fx_band_);
 
-  helper::Gtk::AddLabel(boxFx2, "Contrast:  ");
+  helper::Gtk::AddLabel(boxFx2, "  ✾ Contrast:  ");
   helper::Gtk::AddScale(boxFx2, adjustments->fx_contrast_);
 
   helper::Gtk::AddBox(box_main);  // spacing between sliders and options
