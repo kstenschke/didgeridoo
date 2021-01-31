@@ -32,6 +32,7 @@ void ToneSequencer::generate(WaveGenerator *generator,
                              double step_size,
                              double multiplier,
                              double sub_tone_len,
+                             uint8_t sub_tone_len_factor,
                              double toggle_1_freq,
                              uint8_t inc_tone_rnd_factor,
                              double inc_tone_rnd_if_gt,
@@ -43,7 +44,9 @@ void ToneSequencer::generate(WaveGenerator *generator,
                              double dec_tone_static,
                              double tone_lower_limit,
                              uint8_t tone_reset_when_zero_rnd_factor,
-                             double cut_off_base) {
+                             double cut_off_base,
+                             double saw_tooth_divider,
+                             uint32_t saw_tooth_length) {
   auto tone = (rand() % 12) * multiplier;
   uint8_t cut_off = cut_off_base;
 
@@ -78,10 +81,11 @@ void ToneSequencer::generate(WaveGenerator *generator,
     }
 
     generator->GenerateTone(tone,
-                            sub_tone_len,
+                            sub_tone_len_factor * sub_tone_len,
                             cut_off,
                             2.0,
-                            1.0);
+                            1.0,
+                            saw_tooth_divider, saw_tooth_length);
 
     toggle_1 = !toggle_1;
     ++counter_1;

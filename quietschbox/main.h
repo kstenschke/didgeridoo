@@ -32,15 +32,22 @@
 
 class optionsContainer {
  public:
-  GtkAdjustment *sequence_length_;
-  GtkAdjustment *length_factor_;
-  GtkAdjustment *step_size_;
-  GtkAdjustment *sub_tone_base_len_;
-  GtkAdjustment *inc_tone_rnd_max_;
-  GtkAdjustment *cut_off_base_;
-  GtkAdjustment *dec_tone_rnd_factor_;
-  GtkAdjustment *dec_tone_;
+  // sequence parameters
+  GtkAdjustment *seq_len_;
+  GtkAdjustment *seq_len_factor_;
+  GtkAdjustment *seq_step_size_;
 
+  // tone parameters
+  GtkAdjustment *tone_base_len_;
+  GtkAdjustment *tone_len_factor_;
+  GtkAdjustment *tone_inc_rnd_max_;
+  GtkAdjustment *tone_cut_off_base_;
+  GtkAdjustment *tone_dec_;
+  GtkAdjustment *tone_dec_rnd_factor_;
+  GtkAdjustment *tone_saw_tooth_divider_;
+  GtkAdjustment *tone_saw_tooth_length_;
+
+  // effect parameters
   GtkAdjustment *fx_band_;
   GtkAdjustment *fx_contrast_;
   GtkAdjustment *fx_fade_in_;

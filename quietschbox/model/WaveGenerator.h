@@ -41,7 +41,9 @@ class WaveGenerator {
   WaveGenerator* GenerateTone(uint8_t tone, double seconds = 0.5,
                               uint8_t cut_off = 0,
                               double pi_factor = 2.0,
-                              double slow_down_curve = 1.0);
+                              double slow_down_curve = 1.0,
+                              double saw_tooth_divider = 100.0,
+                              uint32_t saw_tooth_length = 0);
 
   WaveGenerator* GenerateSilence(double seconds);
 
@@ -58,7 +60,9 @@ class WaveGenerator {
                     const std::string& filename,
                     uint8_t cut_off = 0,
                     double pi_factor = 2.0,
-                    double slow_down_curve = 1.0);
+                    double slow_down_curve = 1.0,
+                    double saw_tooth_divider = 100.0,
+                    uint32_t saw_tooth_length = 0);
 
   static void WriteWord(std::ostream &outs, uint64_t value, uint16_t size = 0);
 

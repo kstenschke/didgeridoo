@@ -39,6 +39,7 @@ class ToneSequencer {
                        double step_size,
                        double multiplier,
                        double sub_tone_len = 0.0125,
+                       uint8_t sub_tone_len_factor = 1,
                        double toggle_1_freq = 10.0,
                        uint8_t inc_tone_rnd_factor = 10,
                        double inc_tone_rnd_if_gt = 4.0,
@@ -50,7 +51,9 @@ class ToneSequencer {
                        double dec_tone_static = 2.0,
                        double tone_lower_limit = 0.0,
                        uint8_t tone_reset_when_zero_rnd_factor = 40,
-                       double cut_off_base = 20.0);
+                       double cut_off_base = 20.0,
+                       double saw_tooth_divider = 100.0,
+                       uint32_t saw_tooth_length = 0);
 };
 
 #endif //QUIETSCHBOX_QUIETSCHBOX_MODEL_TONESEQUENCER_H_

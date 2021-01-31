@@ -21,7 +21,6 @@ GtkWidget *AddBox(const GtkWidget *parent, bool horizontal = true,
 GtkWidget *AddButton(const GtkWidget *parent, const std::string& text);
 
 void AddScale(const GtkWidget *parent_box, GtkAdjustment *adjustment);
-
 }  // namespace Gtk
 }  // namespace helper
 

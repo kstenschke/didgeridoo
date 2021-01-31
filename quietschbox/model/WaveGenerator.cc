@@ -37,11 +37,14 @@ void WaveGenerator::WriteWord(std::ostream &outs, uint64_t value, uint16_t size)
     outs.put(static_cast <char> (value & 0xFF));
 }
 
-WaveGenerator* WaveGenerator::GenerateTone(uint8_t tone,
-                                           double seconds,
-                                           uint8_t cut_off,
-                                           double pi_factor,
-                                           double slow_down_curve) {
+WaveGenerator* WaveGenerator::GenerateTone(
+    uint8_t tone,
+    double seconds,
+    uint8_t cut_off,
+    double pi_factor,
+    double slow_down_curve,
+    double saw_tooth_divider,
+    uint32_t saw_tooth_length) {
   std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
 
   GenerateFreq(GetFrequencyByTone(tone),
@@ -49,7 +52,9 @@ WaveGenerator* WaveGenerator::GenerateTone(uint8_t tone,
                filename,
                cut_off,
                pi_factor,
-               slow_down_curve);
+               slow_down_curve,
+               saw_tooth_divider,
+               saw_tooth_length);
 
   ++index_tone_;
 
@@ -59,7 +64,7 @@ WaveGenerator* WaveGenerator::GenerateTone(uint8_t tone,
 WaveGenerator* WaveGenerator::GenerateSilence(double seconds) {
   std::string filename = "tmp_" + std::to_string(index_tone_) + ".wav";
 
-  GenerateFreq(0, seconds, filename, 0);
+  GenerateFreq(0, seconds, filename, 0, 2.0, 1.0);
 
   ++index_tone_;
 
@@ -88,7 +93,9 @@ void WaveGenerator::GenerateFreq(double frequency,
                                  const std::string& filename,
                                  uint8_t cut_off,
                                  double pi_factor,
-                                 double slow_down_curve) {
+                                 double slow_down_curve,
+                                 double saw_tooth_divider,
+                                 uint32_t saw_tooth_length) {
   std::ofstream f(filename, std::ios::binary);
 
   // Write file headers
@@ -118,10 +125,18 @@ void WaveGenerator::GenerateFreq(double frequency,
   int N = hz_ * seconds;  // total number of samples
 
   uint8_t o = 0;
+  uint8_t val_add_cos = 0;
 
   for (int n = 0; n < N; n++) {
     double amplitude = (double)n / N * max_amplitude;
-    double value     = sin( (pi * n/slow_down_curve * frequency) / hz_ );
+
+    double value = sin((pi * n/slow_down_curve * frequency) / hz_);
+
+    if (saw_tooth_length > 0) {
+      value -= val_add_cos / saw_tooth_divider;
+      ++val_add_cos;
+      if (val_add_cos > saw_tooth_length) val_add_cos = 0;
+    }
 
     if (0 < cut_off) {
       ++o;
